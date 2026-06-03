@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/empty"
 import Image from "next/image"
 import { toast } from "sonner"
-import AddProject from "./addProject"
+import ProjectForm from "./projectForm"
 
 const posterURLBase = `${process.env.NEXT_PUBLIC_TIGRIS_PUBLIC_ACCESS_URL}/projects`
 
@@ -52,10 +52,15 @@ export default function ProjectsList({
 						width={400}
 						height={300}
 						className='w-full h-64 object-cover'
+						loading='eager'
 					/>
 					<CardHeader>
 						<CardTitle>{project.name}</CardTitle>
-						<AddProject mode='edit' categories={categories} project={project} />
+						<ProjectForm
+							mode='edit'
+							categories={categories}
+							project={project}
+						/>
 						<Button
 							variant='outline'
 							size='sm'

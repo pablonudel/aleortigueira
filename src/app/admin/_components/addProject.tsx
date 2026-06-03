@@ -77,7 +77,7 @@ const fileSchema = z
 
 const posterURLBase = `${process.env.NEXT_PUBLIC_TIGRIS_PUBLIC_ACCESS_URL}/projects`
 
-export default function AddProject({
+export default function addProject({
 	mode,
 	categories,
 	project,
@@ -145,7 +145,7 @@ function AddProjectForm({
 	project?: projectType
 	mode: string
 }) {
-	const initialPosterPreview = useMemo(() => {
+	const initialPosterPreview = (() => {
 		if (mode === "edit" && project?.poster) {
 			return {
 				id: `poster-${project.poster}`,
@@ -155,9 +155,9 @@ function AddProjectForm({
 			}
 		}
 		return null
-	}, [mode, project])
+	})()
 
-	const initialGalleryPreviews = useMemo(() => {
+	const initialGalleryPreviews = (() => {
 		if (mode === "edit" && project) {
 			return project.gallery.map((fileName) => ({
 				id: `gallery-${fileName}`,
@@ -167,7 +167,7 @@ function AddProjectForm({
 			}))
 		}
 		return [] as PreviewFile[]
-	}, [mode, project])
+	})()
 
 	const [posterPreview, setPosterPreview] = useState<PreviewFile | null>(
 		() => initialPosterPreview,
@@ -213,14 +213,14 @@ function AddProjectForm({
 		defaultValues,
 	})
 
-	const orderedGalleryItems = useMemo(() => {
+	const orderedGalleryItems = (() => {
 		return galleryPreviews
-	}, [galleryPreviews])
+	})()
 
-	const activeItem = useMemo(() => {
+	const activeItem = (() => {
 		if (!activeId) return null
 		return galleryPreviews.find((item) => item.id === activeId) || null
-	}, [activeId, galleryPreviews])
+	})()
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		const formData = new FormData()
@@ -559,6 +559,7 @@ function AddProjectForm({
 										width={640}
 										height={480}
 										className='w-full h-60 object-cover'
+										loading='eager'
 										unoptimized
 									/>
 									<Button
@@ -715,6 +716,7 @@ function SortableGalleryItem({
 				width={240}
 				height={240}
 				className='h-32 w-full object-cover'
+				loading='eager'
 				unoptimized
 			/>
 			<div
