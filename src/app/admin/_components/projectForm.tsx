@@ -344,6 +344,29 @@ function AddProjectForm({
 		onDrop: onGalleryDrop,
 	})
 
+	const handleDeleteGalleryItem = useCallback(
+		(itemId: string) => {
+			const itemToDelete = galleryPreviews.find((item) => item.id === itemId)
+			if (!itemToDelete) return
+
+			if (itemToDelete.file) {
+				URL.revokeObjectURL(itemToDelete.url)
+			}
+
+			const updatedPreviews = galleryPreviews.filter(
+				(item) => item.id !== itemId,
+			)
+			setGalleryPreviews(updatedPreviews)
+
+			const currentFiles = form.getValues("gallery") || []
+			const updatedFiles = currentFiles.filter(
+				(file) => file !== itemToDelete.file,
+			)
+			form.setValue("gallery", updatedFiles, { shouldValidate: true })
+		},
+		[galleryPreviews, form],
+	)
+
 	useEffect(() => {
 		form.reset(defaultValues)
 	}, [form, defaultValues])
@@ -600,7 +623,8 @@ function AddProjectForm({
 								type='button'
 								variant='secondary'
 								size='icon'
-								className='absolute right-1 top-1'>
+								className='absolute right-1 top-1'
+								onClick={() => handleDeleteGalleryItem(item.id)}>
 								<X />
 							</Button>
 						</div>
