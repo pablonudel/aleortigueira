@@ -25,6 +25,22 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { Project } from "@/generated/prisma/client"
 import { listOfYears, slugify } from "@/lib/utils"
+import {
+	DndContext,
+	DragOverlay,
+	PointerSensor,
+	pointerWithin,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core"
+import { snapCenterToCursor } from "@dnd-kit/modifiers"
+import {
+	SortableContext,
+	arrayMove,
+	rectSortingStrategy,
+	useSortable,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Upload, X } from "lucide-react"
 import Image from "next/image"
@@ -159,9 +175,12 @@ function AddProjectForm({
 	const [galleryPreviews, setGalleryPreviews] = useState<PreviewFile[]>(
 		() => initialGalleryPreviews,
 	)
+	const [activeId, setActiveId] = useState<string | null>(null)
+	const [overId, setOverId] = useState<string | null>(null)
 	const [removePoster, setRemovePoster] = useState(false)
 	const posterPreviewRef = useRef<PreviewFile | null>(null)
 	const galleryPreviewsRef = useRef<PreviewFile[]>([])
+	const sensors = useSensors(useSensor(PointerSensor))
 
 	const defaultValues = useMemo(
 		() =>
@@ -197,6 +216,10 @@ function AddProjectForm({
 	const orderedGalleryItems = (() => {
 		return galleryPreviews
 	})()
+	const activeItem = useMemo(
+		() => galleryPreviews.find((item) => item.id === activeId) || null,
+		[activeId, galleryPreviews],
+	)
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		const formData = new FormData()
@@ -366,6 +389,17 @@ function AddProjectForm({
 		},
 		[galleryPreviews, form],
 	)
+
+	const handleDeletePoster = useCallback(() => {
+		if (posterPreview?.file) {
+			URL.revokeObjectURL(posterPreview.url)
+		}
+		if (posterPreview?.isExisting) {
+			setRemovePoster(true)
+		}
+		setPosterPreview(null)
+		form.setValue("poster", null, { shouldValidate: true })
+	}, [posterPreview, form])
 
 	useEffect(() => {
 		form.reset(defaultValues)
@@ -566,16 +600,7 @@ function AddProjectForm({
 										variant='secondary'
 										size='icon'
 										className='absolute right-2 top-2'
-										onClick={() => {
-											if (posterPreview.file) {
-												URL.revokeObjectURL(posterPreview.url)
-											}
-											if (posterPreview.isExisting) {
-												setRemovePoster(true)
-											}
-											setPosterPreview(null)
-											form.setValue("poster", null, { shouldValidate: true })
-										}}>
+										onClick={() => handleDeletePoster()}>
 										<X />
 									</Button>
 								</div>
@@ -605,31 +630,57 @@ function AddProjectForm({
 							: "Arrastra imagenes o haz click para seleccionar"}
 					</span>
 				</div>
-				<div className='grid grid-cols-2 gap-2 lg:grid-cols-4 xl:grid-cols-6'>
-					{galleryPreviews.map((item) => (
-						<div
-							key={item.id}
-							className='relative overflow-hidden border touch-none'>
-							<Image
-								src={item.url}
-								alt='Gallery preview'
-								width={240}
-								height={240}
-								className='h-32 w-full object-cover'
-								loading='eager'
-								unoptimized
-							/>
-							<Button
-								type='button'
-								variant='secondary'
-								size='icon'
-								className='absolute right-1 top-1'
-								onClick={() => handleDeleteGalleryItem(item.id)}>
-								<X />
-							</Button>
+				<DndContext
+					sensors={sensors}
+					collisionDetection={pointerWithin}
+					onDragStart={({ active }) => {
+						setActiveId(String(active.id))
+					}}
+					onDragOver={({ over }) => {
+						setOverId(over ? String(over.id) : null)
+					}}
+					onDragCancel={() => {
+						setActiveId(null)
+						setOverId(null)
+					}}
+					onDragEnd={({ active, over }) => {
+						setActiveId(null)
+						setOverId(null)
+						if (!over || active.id === over.id) return
+						setGalleryPreviews((items) => {
+							const oldIndex = items.findIndex((item) => item.id === active.id)
+							const newIndex = items.findIndex((item) => item.id === over.id)
+							if (oldIndex === -1 || newIndex === -1) return items
+							return arrayMove(items, oldIndex, newIndex)
+						})
+					}}>
+					<SortableContext
+						items={galleryPreviews.map((item) => item.id)}
+						strategy={rectSortingStrategy}>
+						<div className='grid grid-cols-2 gap-2 lg:grid-cols-4 xl:grid-cols-6'>
+							{galleryPreviews.map((preview) => (
+								<SortableGalleryItem
+									key={preview.id}
+									item={preview}
+									isDragging={Boolean(activeId)}
+									isActive={activeId === preview.id}
+									isOverTarget={
+										overId === preview.id && activeId !== preview.id
+									}
+									onRemove={() => handleDeleteGalleryItem(preview.id)}
+								/>
+							))}
 						</div>
-					))}
-				</div>
+					</SortableContext>
+					<DragOverlay modifiers={[snapCenterToCursor]}>
+						{activeItem ? (
+							<div
+								className='h-32 w-60 border bg-center bg-cover'
+								style={{ backgroundImage: `url(${activeItem.url})` }}
+							/>
+						) : null}
+					</DragOverlay>
+				</DndContext>
 				{form.formState.errors.gallery && (
 					<p className='text-red-500 text-sm'>
 						{form.formState.errors.gallery.message}
@@ -637,5 +688,62 @@ function AddProjectForm({
 				)}
 			</div>
 		</form>
+	)
+}
+
+function SortableGalleryItem({
+	item,
+	isDragging,
+	isActive,
+	isOverTarget,
+	onRemove,
+}: {
+	item: PreviewFile
+	isDragging: boolean
+	isActive: boolean
+	isOverTarget: boolean
+	onRemove: () => void
+}) {
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({ id: item.id })
+	const opacity = isActive || isOverTarget ? 0.6 : 1
+	const freezePosition = isDragging
+	const style = {
+		transform: freezePosition ? undefined : CSS.Transform.toString(transform),
+		transition: freezePosition ? undefined : transition,
+		opacity,
+	}
+
+	return (
+		<div
+			ref={setNodeRef}
+			style={style}
+			className='relative overflow-hidden border touch-none'>
+			<Image
+				src={item.url}
+				alt='Gallery preview'
+				width={240}
+				height={240}
+				className='h-32 w-full object-cover'
+				loading='eager'
+				unoptimized
+			/>
+			<div
+				className='absolute inset-0 cursor-grab active:cursor-grabbing'
+				{...attributes}
+				{...listeners}
+			/>
+			<Button
+				type='button'
+				variant='secondary'
+				size='icon'
+				className='absolute right-1 top-1 z-10'
+				onClick={(event) => {
+					event.stopPropagation()
+					onRemove()
+				}}>
+				<X />
+			</Button>
+		</div>
 	)
 }
