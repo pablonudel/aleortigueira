@@ -160,11 +160,14 @@ export async function createProject(
 	}
 }
 
-export async function getAllProjects() {
+export async function getAllProjects(
+	publicOnly = false,
+): Promise<getAllProjectsType> {
 	try {
 		const projects = await prisma.project.findMany({
+			where: publicOnly ? { isPublic: true } : undefined,
 			orderBy: {
-				createdAt: "desc",
+				order: "desc",
 			},
 			include: {
 				category: {
@@ -221,6 +224,29 @@ export async function getProjectById(projectId: string) {
 	}
 }
 
+export async function getProjectBySlug(slug: string) {
+	try {
+		if (!slug) {
+			return { succes: false, message: "Slug del proyecto es requerido." }
+		}
+		const project = await prisma.project.findUnique({
+			where: { slug },
+			include: {
+				category: {
+					select: { name: true },
+				},
+			},
+		})
+		if (!project) {
+			return { success: false, message: "Proyecto no encontrado." }
+		}
+		return { success: true, data: project }
+	} catch (error) {
+		console.error("Error fetching project by slug:", error)
+		return { success: false, message: "Error al obtener el proyecto." }
+	}
+}
+
 export async function deleteProject(projectId: string) {
 	try {
 		if (!projectId) {
@@ -244,6 +270,7 @@ export async function deleteProject(projectId: string) {
 			where: { id: projectId },
 		})
 		revalidatePath("/admin")
+		revalidatePath("/")
 		return { success: true, message: "Proyecto eliminado con éxito." }
 	} catch (error) {
 		console.error("Error deleting project:", error)
@@ -429,6 +456,8 @@ export async function editProjectById(
 		})
 
 		revalidatePath("/admin")
+		revalidatePath("/")
+		revalidatePath(`/${slug}`)
 		return {
 			success: true,
 			message: "Proyecto actualizado con exito.",

@@ -44,6 +44,7 @@ model Project {
   video       String?
   gallery     String[]
   isPublic    Boolean  @default(false) // true or false
+  order       Int      @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

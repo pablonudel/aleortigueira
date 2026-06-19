@@ -89,7 +89,10 @@ export default function ProjectForm({
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant='outline'>
+				<Button
+					variant={`${mode === "edit" ? "ghost" : "outline"}`}
+					size='sm'
+					className={`${mode === "edit" && "w-full"}`}>
 					{mode === "create" ? "Nuevo Proyecto" : "Editar"}
 				</Button>
 			</DialogTrigger>
@@ -467,7 +470,7 @@ function AddProjectForm({
 						render={({ field }) => (
 							<div>
 								<Label>Descripción</Label>
-								<Textarea {...field} className='h-44' />
+								<Textarea {...field} className='h-51.5' />
 							</div>
 						)}
 					/>
@@ -566,7 +569,7 @@ function AddProjectForm({
 						{!posterPreview && (
 							<div
 								{...getPosterRootProps()}
-								className={`flex min-h-28 w-full h-60 cursor-pointer items-center justify-center border border-dashed px-4 text-sm transition ${
+								className={`flex w-full h-67.5 cursor-pointer items-center justify-center border border-dashed px-4 text-sm transition ${
 									isPosterDragActive ? "bg-muted" : "bg-transparent"
 								}`}>
 								<input {...getPosterInputProps()} />
@@ -584,14 +587,14 @@ function AddProjectForm({
 							</p>
 						)}
 						{posterPreview && (
-							<div className='mt-2 h-60 w-full'>
+							<div className='mt-2 w-full'>
 								<div className='relative flex justify-center'>
 									<Image
 										src={posterPreview.url}
 										alt='Poster preview'
-										width={640}
-										height={480}
-										className='w-full h-60 object-cover'
+										width={400}
+										height={300}
+										className='w-full h-auto object-cover'
 										loading='eager'
 										unoptimized
 									/>
