@@ -6,7 +6,7 @@ export default function NavBar() {
 			<Link href='/'>
 				<div>
 					<h1 className='text-2xl font-bold uppercase leading-6'>
-						Alejandro Ortigueira
+						Alejandro Ortigueira (ADF)
 					</h1>
 					<h2 className='text-lg uppercase tracking-wide text-muted-foreground leading-6'>
 						Director de Fotografía

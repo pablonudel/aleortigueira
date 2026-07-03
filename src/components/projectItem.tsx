@@ -5,20 +5,12 @@ import Link from "next/link"
 type projectType = Project & { category: { name: string } }
 const posterURLBase = `${process.env.NEXT_PUBLIC_TIGRIS_PUBLIC_ACCESS_URL}/projects`
 
-export default function ProjectItem({
-	key,
-	project,
-}: {
-	key: number
-	project: projectType
-}) {
+export default function ProjectItem({ project }: { project: projectType }) {
 	return (
 		<Link href={`/${project.slug}`}>
-			<div
-				key={key}
-				className='relative hover:scale-95 transition-transform duration-300'>
+			<div className='relative hover:scale-95 transition-transform duration-300'>
 				<div className='absolute top-0 left-0 w-full h-full bg-black/40 bg-opacity-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300'>
-					<h3 className='text-white text-lg font-bold uppercase'>
+					<h3 className='text-white text-2xl font-bold tracking-wider'>
 						{project.name}
 					</h3>
 				</div>

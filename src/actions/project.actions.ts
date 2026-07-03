@@ -145,6 +145,7 @@ export async function createProject(
 		})
 
 		revalidatePath("/admin")
+		revalidatePath("/")
 		return {
 			success: true,
 			message: "Proyecto creado con exito.",
