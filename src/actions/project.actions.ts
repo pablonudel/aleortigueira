@@ -2,13 +2,12 @@
 
 import { Project } from "@/generated/prisma/client"
 import prisma from "@/lib/prisma"
-import { slugify } from "@/lib/utils"
-import { put, remove } from "@tigrisdata/storage"
+import { slugify, unslugify } from "@/lib/utils"
+import { remove } from "@tigrisdata/storage"
 import { nanoid } from "nanoid"
 import { revalidatePath } from "next/cache"
-
-const MAX_FILE_SIZE = 500 * 1024
-const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png"])
+import { getCategoryById } from "./category.actions"
+import { uploadImage, validateImage } from "./common.actions"
 
 const EXTENSION_BY_TYPE: Record<string, string> = {
 	"image/jpeg": "jpg",
@@ -29,29 +28,6 @@ type EditProjectResult = {
 		poster: string | null
 		gallery: string[]
 	}
-}
-
-function validateImage(file: File) {
-	if (!ACCEPTED_TYPES.has(file.type)) {
-		return "Solo se permiten imagenes JPG o PNG."
-	}
-	if (file.size > MAX_FILE_SIZE) {
-		return "La imagen supera el maximo de 500KB."
-	}
-	return null
-}
-
-async function uploadImage(file: File, path: string) {
-	const arrayBuffer = await file.arrayBuffer()
-	const buffer = Buffer.from(arrayBuffer)
-	const result = await put(path, buffer, {
-		access: "public",
-		contentType: file.type,
-	})
-	if (result.error) {
-		throw new Error(result.error.message)
-	}
-	return result.data?.url || ""
 }
 
 async function getUniqueSlug(baseSlug: string) {
@@ -144,8 +120,11 @@ export async function createProject(
 			select: { id: true },
 		})
 
+		const catName = await getCategoryById(categoryId)
+
 		revalidatePath("/admin")
 		revalidatePath("/")
+		revalidatePath(`/tag/${catName?.name}`)
 		return {
 			success: true,
 			message: "Proyecto creado con exito.",
@@ -165,8 +144,52 @@ export async function getAllProjects(
 	publicOnly = false,
 ): Promise<getAllProjectsType> {
 	try {
-		const projects = await prisma.project.findMany({
+		let projects = await prisma.project.findMany({
 			where: publicOnly ? { isPublic: true } : undefined,
+			orderBy: {
+				order: "desc",
+			},
+			include: {
+				category: {
+					select: { name: true },
+				},
+			},
+		})
+
+		projects = projects.map((project) => ({
+			...project,
+			category: {
+				name: unslugify(project.category.name),
+			},
+		}))
+
+		return {
+			success: true,
+			message: "Proyectos obtenidos con éxito.",
+			data: projects,
+		}
+	} catch (error) {
+		console.error("Error fetching projects:", error)
+		return {
+			success: false,
+			message: "Error al obtener los proyectos.",
+			data: [],
+		}
+	}
+}
+
+export async function getProjectsByCategoryName(
+	categoryName: string,
+	publicOnly = false,
+): Promise<getAllProjectsType> {
+	try {
+		const projects = await prisma.project.findMany({
+			where: {
+				category: {
+					name: categoryName,
+				},
+				...(publicOnly ? { isPublic: true } : {}),
+			},
 			orderBy: {
 				order: "desc",
 			},
@@ -207,7 +230,7 @@ export async function getProjectById(projectId: string) {
 		if (!projectId) {
 			return { success: false, message: "ID del proyecto es requerido." }
 		}
-		const project = await prisma.project.findUnique({
+		let project = await prisma.project.findUnique({
 			where: { id: projectId },
 			include: {
 				category: {
@@ -217,6 +240,12 @@ export async function getProjectById(projectId: string) {
 		})
 		if (!project) {
 			return { success: false, message: "Proyecto no encontrado." }
+		}
+		project = {
+			...project,
+			category: {
+				name: unslugify(project.category.name),
+			},
 		}
 		return { success: true, data: project }
 	} catch (error) {
@@ -230,7 +259,7 @@ export async function getProjectBySlug(slug: string) {
 		if (!slug) {
 			return { succes: false, message: "Slug del proyecto es requerido." }
 		}
-		const project = await prisma.project.findUnique({
+		let project = await prisma.project.findUnique({
 			where: { slug },
 			include: {
 				category: {
@@ -240,6 +269,12 @@ export async function getProjectBySlug(slug: string) {
 		})
 		if (!project) {
 			return { success: false, message: "Proyecto no encontrado." }
+		}
+		project = {
+			...project,
+			category: {
+				name: unslugify(project.category.name),
+			},
 		}
 		return { success: true, data: project }
 	} catch (error) {
@@ -270,8 +305,10 @@ export async function deleteProject(projectId: string) {
 		await prisma.project.delete({
 			where: { id: projectId },
 		})
+
 		revalidatePath("/admin")
 		revalidatePath("/")
+		revalidatePath(`/tag/${project.data?.category.name}`)
 		return { success: true, message: "Proyecto eliminado con éxito." }
 	} catch (error) {
 		console.error("Error deleting project:", error)
@@ -296,6 +333,7 @@ export async function editProjectById(
 				slug: true,
 				poster: true,
 				gallery: true,
+				categoryId: true,
 			},
 		})
 
@@ -453,12 +491,14 @@ export async function editProjectById(
 				gallery: galleryFileNames,
 				isPublic,
 			},
-			select: { id: true },
+			select: { id: true, categoryId: true },
 		})
 
 		revalidatePath("/admin")
 		revalidatePath("/")
-		revalidatePath(`/${slug}`)
+		revalidatePath(`/(public)/${slug}`)
+		revalidatePath("/(public)/tag/[categoryName]", "page")
+
 		return {
 			success: true,
 			message: "Proyecto actualizado con exito.",

@@ -1,12 +1,12 @@
 "use server"
 
 import prisma from "@/lib/prisma"
-import { capitalize } from "@/lib/utils"
+import { slugify, unslugify } from "@/lib/utils"
 import { revalidatePath } from "next/cache"
 
 export async function addCategory(name: string) {
 	try {
-		const categoryName = capitalize(name)
+		const categoryName = slugify(name)
 
 		const existingCategory = await getCategoryByName(categoryName)
 		if (existingCategory) {
@@ -32,7 +32,7 @@ export async function addCategory(name: string) {
 
 export async function getAllCategories() {
 	try {
-		const categories = await prisma.category.findMany({
+		let categories = await prisma.category.findMany({
 			orderBy: {
 				name: "asc",
 			},
@@ -42,6 +42,10 @@ export async function getAllCategories() {
 				projects: true,
 			},
 		})
+		categories = categories.map((category) => ({
+			...category,
+			name: unslugify(category.name),
+		}))
 		return { success: true, data: categories }
 	} catch (error) {
 		console.error("Error fetching categories:", error)
@@ -61,7 +65,7 @@ export type getAllCategoriesType = {
 export async function getCategoryByName(name: string) {
 	try {
 		const category = await prisma.category.findUnique({
-			where: { name },
+			where: { name: name },
 			include: {
 				projects: {
 					select: { id: true },
@@ -75,6 +79,18 @@ export async function getCategoryByName(name: string) {
 	}
 }
 
+export async function getCategoryById(id: string) {
+	try {
+		const category = await prisma.category.findUnique({
+			where: { id: id },
+		})
+		return category
+	} catch (error) {
+		console.error("Error finding category by id:", error)
+		return null
+	}
+}
+
 export type getCategoryByNameType = {
 	id: string
 	name: string
@@ -83,7 +99,7 @@ export type getCategoryByNameType = {
 
 export async function editCategory(name: string, newName: string) {
 	try {
-		const newCategoryName = capitalize(newName)
+		const newCategoryName = slugify(newName)
 		if (name === newCategoryName) {
 			return { success: false, message: "El nuevo nombre es igual al actual" }
 		}
@@ -112,7 +128,8 @@ export async function editCategory(name: string, newName: string) {
 
 export async function deleteCategory(name: string) {
 	try {
-		const category = await getCategoryByName(name)
+		const categoryName = slugify(name)
+		const category = await getCategoryByName(categoryName)
 		if (!category) {
 			return { success: false, message: "Categoría no encontrada" }
 		}
@@ -123,7 +140,7 @@ export async function deleteCategory(name: string) {
 			}
 		}
 		await prisma.category.delete({
-			where: { name },
+			where: { name: categoryName },
 		})
 		revalidatePath("/admin")
 		return { success: true, message: "Categoría eliminada con éxito" }

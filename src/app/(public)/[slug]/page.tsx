@@ -1,5 +1,9 @@
 import { getProjectBySlug } from "@/actions/project.actions"
+import { slugify } from "@/lib/utils"
+import { Tag } from "lucide-react"
+import Link from "next/link"
 import { Suspense } from "react"
+import ImageGallery from "./_components/imageGallery"
 
 export default async function Page({
 	params,
@@ -23,9 +27,11 @@ async function Content({ slug }: { slug: string }) {
 		return <div>{message}</div>
 	}
 
+	const slugifiedName = slugify(data!.category.name)
+
 	return (
 		<Suspense fallback={<div>Cargando proyecto...</div>}>
-			<div className='flex flex-col lg:flex-row w-full'>
+			<div className='flex flex-col xl:flex-row w-full'>
 				{data!.video && (
 					<iframe
 						title='vimeo-player'
@@ -38,16 +44,20 @@ async function Content({ slug }: { slug: string }) {
 						className='w-full xl:w-3/5 h-auto aspect-video'
 					/>
 				)}
-				<div className='p-8 w-full bg-muted-foreground/10 lg:my-8'>
-					<p>{data!.year}</p>
+				<div className='p-8 w-full bg-muted-foreground/10 xl:my-8'>
 					<h1 className='font-bold tracking-wide mb-8'>{data!.name}</h1>
 					<p className='whitespace-pre-line mb-8'>{data!.description}</p>
-					<p>{data!.category.name}</p>
+					<Link
+						href={`/tag/${slugifiedName}`}
+						className='text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1'>
+						<Tag size={14} strokeWidth={2} />
+						{data!.category.name}
+					</Link>
 				</div>
 			</div>
 			{data!.gallery.length > 0 && (
 				<div className='p-8'>
-					<h2 className='text-3xl font-bold mb-4'>Galería</h2>
+					<ImageGallery gallery={data!.gallery} projectId={data!.id} />
 				</div>
 			)}
 		</Suspense>

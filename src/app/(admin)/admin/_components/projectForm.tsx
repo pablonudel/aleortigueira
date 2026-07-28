@@ -24,7 +24,12 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { Project } from "@/generated/prisma/client"
-import { listOfYears, slugify } from "@/lib/utils"
+import {
+	ACCEPTED_TYPES,
+	MAX_FILE_SIZE,
+	listOfYears,
+	slugify,
+} from "@/lib/utils"
 import {
 	DndContext,
 	DragOverlay,
@@ -51,8 +56,8 @@ import { toast } from "sonner"
 import * as z from "zod"
 import CategoryAdmin from "./categoryAdmin"
 
-const MAX_FILE_SIZE = 500 * 1024
-const ACCEPTED_TYPES = ["image/jpeg", "image/png"]
+// const MAX_FILE_SIZE = 500 * 1024
+// const ACCEPTED_TYPES = ["image/jpeg", "image/png"]
 
 type PreviewFile = {
 	id: string

@@ -1,3 +1,4 @@
+import { getProfile, profileType } from "@/actions/profile.actions"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
@@ -23,9 +24,12 @@ async function LayoutPage({ children }: { children: React.ReactNode }) {
 	if (!session) {
 		redirect("/signin")
 	}
+
+	const profile = (await getProfile()) as profileType
+
 	return (
 		<>
-			<AdminNavBar />
+			<AdminNavBar profile={profile} />
 			{children}
 		</>
 	)

@@ -30,3 +30,13 @@ export function slugify(input: string) {
 		.replace(/-+/g, "-")
 		.replace(/^-|-$/g, "")
 }
+
+export function unslugify(input: string) {
+	const result = input.replace(/-/g, " ")
+	return result.charAt(0).toUpperCase() + result.slice(1)
+}
+
+export const MAX_FILE_SIZE = 500 * 1024
+export const ACCEPTED_TYPES = ["image/jpeg", "image/png"]
+export const countriesList = ["Argentina", "México"]
+export const socialNetworksList = ["Instagram", "Vimeo", "Linkedin"]
