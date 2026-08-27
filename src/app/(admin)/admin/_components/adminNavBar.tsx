@@ -2,12 +2,6 @@
 
 import { profileType } from "@/actions/profile.actions"
 import { Button } from "@/components/ui/button"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
 import ProfileForm from "./profileForm"
@@ -33,18 +27,7 @@ export default function AdminNavBar({ profile }: { profile: profileType }) {
 				</h2>
 			</div>
 			<div className='space-x-4'>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='outline'>Perfil</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						<DropdownMenuItem asChild>
-							<ProfileForm profile={profile} />
-						</DropdownMenuItem>
-
-						<DropdownMenuItem>Editar Credenciales</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<ProfileForm profile={profile} />
 				<Button onClick={handleLogout}>Cerrar sesión</Button>
 			</div>
 		</nav>

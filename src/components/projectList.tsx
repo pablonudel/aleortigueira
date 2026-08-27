@@ -1,16 +1,19 @@
 import { getAllProjects } from "@/actions/project.actions"
+import { DatabaseX } from "lucide-react"
 import ProjectItem from "./projectItem"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty"
 
 export default async function ProjectList() {
 	"use cache"
-	const { success, message, data } = await getAllProjects(true)
+	const { success, data } = await getAllProjects(true)
 
 	if (!success) {
 		return (
 			<Empty>
 				<EmptyHeader>
-					<EmptyTitle>{message}</EmptyTitle>
+					<EmptyTitle>
+						<DatabaseX />
+					</EmptyTitle>
 					<EmptyDescription>
 						Se ha producido un error al cargar los proyectos. Inténtalo de nuevo
 						más tarde.

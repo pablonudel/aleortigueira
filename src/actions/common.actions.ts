@@ -1,5 +1,6 @@
 import { MAX_FILE_SIZE } from "@/lib/utils"
 import { put } from "@tigrisdata/storage"
+import { revalidatePath } from "next/cache"
 
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png"])
 
@@ -24,5 +25,7 @@ export async function uploadImage(file: File, path: string) {
 	if (result.error) {
 		throw new Error(result.error.message)
 	}
+	revalidatePath("/")
+	revalidatePath("/(public)/[slug]", "page")
 	return result.data?.url || ""
 }

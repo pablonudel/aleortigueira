@@ -2,7 +2,7 @@ import { Project } from "@/generated/prisma/client"
 import Image from "next/image"
 import Link from "next/link"
 
-type projectType = Project & { category: { name: string } }
+type projectType = Project & { category: { name: string | null } }
 const posterURLBase = `${process.env.NEXT_PUBLIC_TIGRIS_PUBLIC_ACCESS_URL}/projects`
 
 export default function ProjectItem({ project }: { project: projectType }) {

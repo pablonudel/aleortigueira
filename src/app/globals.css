@@ -126,6 +126,7 @@
 	}
 	html {
 		@apply font-sans;
+		scroll-behavior: smooth;
 	}
 	button:not(:disabled),
 	[role="button"]:not(:disabled) {
@@ -138,5 +139,48 @@
 	h5,
 	h6 {
 		@apply text-4xl font-heading;
+	}
+	.bio-gradient {
+		background: #ffffff;
+		background: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 1) 0%,
+			rgba(255, 255, 255, 1) 40%,
+			rgba(227, 227, 227, 1) 40%,
+			rgba(237, 237, 237, 1) 47%,
+			rgba(243, 243, 243, 1) 100%
+		);
+	}
+
+	.bio-text-gradient {
+		background: #ffffff;
+		background: linear-gradient(
+			180deg,
+			rgba(243, 243, 243, 1) 40%,
+			rgba(255, 255, 255, 1) 70%
+		);
+	}
+
+	@media (min-width: 1024px) {
+		.bio-gradient {
+			background: #ffffff;
+			background: linear-gradient(
+				90deg,
+				rgba(255, 255, 255, 1) 0%,
+				rgba(255, 255, 255, 1) 40%,
+				rgba(227, 227, 227, 1) 40%,
+				rgba(237, 237, 237, 1) 47%,
+				rgba(243, 243, 243, 1) 100%
+			);
+		}
+
+		.bio-text-gradient {
+			background: #ffffff;
+			background: linear-gradient(
+				90deg,
+				rgba(243, 243, 243, 1) 40%,
+				rgba(255, 255, 255, 1) 70%
+			);
+		}
 	}
 }

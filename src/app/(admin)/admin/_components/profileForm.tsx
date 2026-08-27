@@ -39,10 +39,10 @@ import { z } from "zod"
 export default function ProfileForm({ profile }: { profile: profileType }) {
 	return (
 		<Dialog>
-			<DialogTrigger className='w-full px-3 py-2 uppercase text-xs font-medium text-left hover:bg-foreground/5 tracking-wider'>
-				Editar Perfil
+			<DialogTrigger asChild>
+				<Button variant='outline'>Editar Perfil</Button>
 			</DialogTrigger>
-			<DialogContent className='max-w-md sm:max-w-lg md:max-w-xl '>
+			<DialogContent className='max-w-md sm:max-w-lg md:max-w-xl'>
 				<DialogHeader>
 					<DialogTitle>Editar Perfil</DialogTitle>
 				</DialogHeader>

@@ -6,8 +6,10 @@ import { remove } from "@tigrisdata/storage"
 import { revalidatePath } from "next/cache"
 import { uploadImage, validateImage } from "./common.actions"
 
+const randomNumber = Math.floor(Math.random() * 1000000).toString()
+
 const userName = process.env.ADMIN_NAME as string
-const PROFILE_IMAGE_NAME = "profleImage"
+const PROFILE_IMAGE_NAME = `profileImage_${randomNumber}`
 const PROFILE_IMAGE_PATH = `profile/${PROFILE_IMAGE_NAME}`
 
 export async function getProfile() {
@@ -27,7 +29,7 @@ export async function getProfile() {
 		return { success: true, data: profile }
 	} catch (error) {
 		console.error("Error fetching profile:", error)
-		return { success: false, error: "Failed to fetch profile" }
+		return { success: false, message: "Failed to fetch profile" }
 	}
 }
 
@@ -117,7 +119,7 @@ export async function editProfile(formData: FormData) {
 
 		revalidatePath("/admin")
 		revalidatePath("/")
-		revalidatePath("/(public)/[slug]")
+		revalidatePath("/(public)/[slug]", "page")
 		revalidatePath("/(public)/tag/[categoryName]", "page")
 
 		return { success: true, message: "Perfil actualizado correctamente" }

@@ -144,7 +144,7 @@ export async function getAllProjects(
 	publicOnly = false,
 ): Promise<getAllProjectsType> {
 	try {
-		let projects = await prisma.project.findMany({
+		const projects = await prisma.project.findMany({
 			where: publicOnly ? { isPublic: true } : undefined,
 			orderBy: {
 				order: "desc",
@@ -156,7 +156,7 @@ export async function getAllProjects(
 			},
 		})
 
-		projects = projects.map((project) => ({
+		const formattedProjects = projects.map((project) => ({
 			...project,
 			category: {
 				name: unslugify(project.category.name),
@@ -166,7 +166,54 @@ export async function getAllProjects(
 		return {
 			success: true,
 			message: "Proyectos obtenidos con éxito.",
-			data: projects,
+			data: formattedProjects,
+		}
+	} catch (error) {
+		console.error("Error fetching projects:", error)
+		return {
+			success: false,
+			message: "Error al obtener los proyectos.",
+			data: [],
+		}
+	}
+}
+
+export async function getProjects(
+	categoryName = null,
+): Promise<getAllProjectsType> {
+	try {
+		const projects = await prisma.project.findMany({
+			where: {
+				isPublic: true,
+				...(categoryName
+					? {
+							category: {
+								name: categoryName,
+							},
+						}
+					: {}),
+			},
+			orderBy: {
+				order: "desc",
+			},
+			include: {
+				category: {
+					select: { name: true },
+				},
+			},
+		})
+
+		const formattedProjects = projects.map((project) => ({
+			...project,
+			category: {
+				name: unslugify(project.category.name) || null,
+			},
+		}))
+
+		return {
+			success: true,
+			message: "Proyectos obtenidos con éxito.",
+			data: formattedProjects,
 		}
 	} catch (error) {
 		console.error("Error fetching projects:", error)
@@ -220,7 +267,7 @@ export type getAllProjectsType = {
 	message?: string
 	data: (Project & {
 		category: {
-			name: string
+			name: string | null
 		}
 	})[]
 }
