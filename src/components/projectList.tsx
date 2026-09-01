@@ -1,11 +1,12 @@
-import { getAllProjects } from "@/actions/project.actions"
-import { DatabaseX } from "lucide-react"
+import { getProjects } from "@/actions/project.actions"
+import { unslugify } from "@/lib/utils"
+import { DatabaseX, MessageSquareWarning } from "lucide-react"
 import ProjectItem from "./projectItem"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty"
 
-export default async function ProjectList() {
+export default async function ProjectList({ category }: { category?: string }) {
 	"use cache"
-	const { success, data } = await getAllProjects(true)
+	const { success, data } = await getProjects(category as never)
 
 	if (!success) {
 		return (
@@ -23,11 +24,35 @@ export default async function ProjectList() {
 		)
 	}
 
+	if (!data || data.length === 0) {
+		return (
+			<Empty>
+				<EmptyHeader>
+					<EmptyTitle>
+						<MessageSquareWarning />
+					</EmptyTitle>
+					<EmptyDescription>
+						No se han encontrado proyectos para la categoría seleccionada.
+					</EmptyDescription>
+				</EmptyHeader>
+			</Empty>
+		)
+	}
+
+	const unSlugifiedCategory = category && unslugify(category)
+
 	return (
-		<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
-			{data.map((project, index) => (
-				<ProjectItem key={index} project={project} />
-			))}
-		</div>
+		<>
+			{category && (
+				<div className='px-8'>
+					<h2 className='text-xl font-bold uppercase'>{unSlugifiedCategory}</h2>
+				</div>
+			)}
+			<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+				{data.map((project, index) => (
+					<ProjectItem key={index} project={project} />
+				))}
+			</div>
+		</>
 	)
 }

@@ -179,7 +179,7 @@ export async function getAllProjects(
 }
 
 export async function getProjects(
-	categoryName = null,
+	categoryName = undefined,
 ): Promise<getAllProjectsType> {
 	try {
 		const projects = await prisma.project.findMany({
@@ -543,8 +543,8 @@ export async function editProjectById(
 
 		revalidatePath("/admin")
 		revalidatePath("/")
-		revalidatePath(`/(public)/${slug}`)
-		revalidatePath("/(public)/tag/[categoryName]", "page")
+		revalidatePath(`/(public)/${slug}`, "page")
+		// revalidatePath("/(public)/tag/[categoryName]", "page")
 
 		return {
 			success: true,

@@ -115,7 +115,9 @@ export async function editCategory(name: string, newName: string) {
 			where: { name },
 			data: { name: newCategoryName },
 		})
+		revalidatePath("/")
 		revalidatePath("/admin")
+		revalidatePath("/(public)/[slug]/", "page")
 		return {
 			success: true,
 			message: "Categoría editada con éxito",

@@ -39,7 +39,8 @@ export default function RootLayout({
 				"font-sans",
 				notoSans.variable,
 				outfitHeading.variable,
-			)}>
+			)}
+			data-scroll-behavior='smooth'>
 			<body className='min-h-full flex flex-col'>
 				{children}
 				<Toaster position='bottom-center' richColors />

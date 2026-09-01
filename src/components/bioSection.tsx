@@ -29,7 +29,9 @@ export default async function BioSection() {
 	const { image, bio } = data
 
 	return (
-		<div id='bio' className='flex flex-col lg:flex-row lg:max-w-11/12 mx-auto'>
+		<div
+			id='bio'
+			className='flex flex-col lg:flex-row lg:max-w-11/12 mx-auto mb-8'>
 			<div className='w-full px-6 lg:px-0 lg:py-8 bio-gradient'>
 				<Image
 					src={`${imageBaseURL}/${image}`}
