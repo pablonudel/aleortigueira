@@ -43,7 +43,7 @@ export default async function BioSection() {
 			</div>
 			<div className='flex w-full px-6 pt-6 lg:pt-8 pb-8 bio-text-gradient'>
 				<div className='self-center'>
-					<h2 className='text-xl font-bold mb-4 uppercase'>Bio</h2>
+					<h2 className='mb-4 font-bold uppercase'>Bio</h2>
 					<p className='whitespace-pre-line'>{bio}</p>
 				</div>
 			</div>

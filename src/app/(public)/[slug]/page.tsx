@@ -45,7 +45,9 @@ async function Content({ slug }: { slug: string }) {
 					/>
 				)}
 				<div className='p-6 md:p-8 w-full bg-muted-foreground/10 xl:my-8'>
-					<h1 className='font-bold tracking-wide mb-8'>{data!.name}</h1>
+					<h1 className='text-3xl font-bold tracking-wide mb-8'>
+						{data!.name}
+					</h1>
 					<p className='whitespace-pre-line mb-8'>{data!.description}</p>
 					<Link
 						href={`/?category=${slugifiedCategoryName}`}

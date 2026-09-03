@@ -3,7 +3,7 @@ import { slugify } from "@/lib/utils"
 import "react-photo-view/dist/react-photo-view.css"
 
 import ContactSection from "@/components/contactSection"
-import NavBar from "@/components/navBar"
+import { NavBar } from "@/components/navBar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
 export default async function Layout({

@@ -58,7 +58,7 @@ async function Content({ categoryName }: { categoryName: string }) {
 		)
 	}
 	return (
-		<div>
+		<div className='flex-1'>
 			<div className='px-8 pb-8'>
 				<h2 className='text-xl font-bold uppercase'>{catName}</h2>
 			</div>

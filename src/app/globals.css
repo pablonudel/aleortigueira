@@ -138,16 +138,16 @@
 	h4,
 	h5,
 	h6 {
-		@apply text-4xl font-heading;
+		@apply font-heading text-xl;
 	}
 	.bio-gradient {
 		background: #ffffff;
 		background: linear-gradient(
 			180deg,
 			rgba(255, 255, 255, 1) 0%,
-			rgba(255, 255, 255, 1) 40%,
-			rgba(227, 227, 227, 1) 40%,
-			rgba(237, 237, 237, 1) 47%,
+			rgba(255, 255, 255, 1) 60%,
+			rgba(227, 227, 227, 1) 60%,
+			rgba(237, 237, 237, 1) 67%,
 			rgba(243, 243, 243, 1) 100%
 		);
 	}
@@ -167,9 +167,9 @@
 			background: linear-gradient(
 				90deg,
 				rgba(255, 255, 255, 1) 0%,
-				rgba(255, 255, 255, 1) 40%,
-				rgba(227, 227, 227, 1) 40%,
-				rgba(237, 237, 237, 1) 47%,
+				rgba(255, 255, 255, 1) 60%,
+				rgba(227, 227, 227, 1) 60%,
+				rgba(237, 237, 237, 1) 67%,
 				rgba(243, 243, 243, 1) 100%
 			);
 		}
@@ -182,5 +182,9 @@
 				rgba(255, 255, 255, 1) 70%
 			);
 		}
+	}
+
+	.serif-font {
+		font-family: "Playfair Display", serif;
 	}
 }
