@@ -2,10 +2,14 @@ import { getProfile } from "@/actions/profile.actions"
 import { DatabaseX } from "lucide-react"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty"
 
-export default async function contactSection() {
+export default async function ContactSection({
+	profile,
+}: {
+	profile: Awaited<ReturnType<typeof getProfile>>
+}) {
 	"use cache"
 
-	const { success, data } = await getProfile()
+	const { success, data } = profile
 
 	if (!success || !data) {
 		return (

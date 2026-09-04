@@ -53,6 +53,28 @@ function DropdownMenuContent({
 	)
 }
 
+function DropdownMenuContent2({
+	className,
+	align = "start",
+	sideOffset = 4,
+	...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+	return (
+		<DropdownMenuPrimitive.Portal>
+			<DropdownMenuPrimitive.Content
+				data-slot='dropdown-menu-content'
+				sideOffset={sideOffset}
+				align={align}
+				className={cn(
+					"z-50 max-h-(--radix-dropdown-menu-content-available-height) w-(--radix-dropdown-menu-trigger-width) min-w-30 origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-none bg-popover text-popover-foreground  duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:overflow-hidden data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+					className,
+				)}
+				{...props}
+			/>
+		</DropdownMenuPrimitive.Portal>
+	)
+}
+
 function DropdownMenuGroup({
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {
@@ -77,6 +99,29 @@ function DropdownMenuItem({
 			data-variant={variant}
 			className={cn(
 				"group/dropdown-menu-item relative flex cursor-default items-center gap-2.5 rounded-none px-3 py-2 text-xs font-medium tracking-wider uppercase outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-9.5 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 data-[variant=destructive]:*:[svg]:text-destructive",
+				className,
+			)}
+			{...props}
+		/>
+	)
+}
+
+function DropdownMenuItem2({
+	className,
+	inset,
+	variant = "default",
+	...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
+	inset?: boolean
+	variant?: "default" | "destructive"
+}) {
+	return (
+		<DropdownMenuPrimitive.Item
+			data-slot='dropdown-menu-item'
+			data-inset={inset}
+			data-variant={variant}
+			className={cn(
+				"group/dropdown-menu-item relative flex cursor-pointer items-center justify-center gap-2.5 rounded-none px-2 py-1 text-sm font-medium tracking-wider uppercase text-foreground/50 hover:text-foreground outline-hidden select-none not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:pl-9.5 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 data-[variant=destructive]:*:[svg]:text-destructive",
 				className,
 			)}
 			{...props}
@@ -253,8 +298,10 @@ export {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
+	DropdownMenuContent2,
 	DropdownMenuGroup,
 	DropdownMenuItem,
+	DropdownMenuItem2,
 	DropdownMenuLabel,
 	DropdownMenuPortal,
 	DropdownMenuRadioGroup,

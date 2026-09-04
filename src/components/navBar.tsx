@@ -6,13 +6,17 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 import { AppSideBar } from "./AppSideBar"
+import LetterSwapForward from "./fancy/text/letter-swap-forward-anim"
+import InstagramIcon from "./instagram-icon"
+import LinkedinIcon from "./linkedin-icon"
 import {
 	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
+	DropdownMenuContent2,
+	DropdownMenuItem2,
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
 import { SidebarTrigger } from "./ui/sidebar"
+import VimeoIcon from "./vimeo-icon"
 
 function BioLink() {
 	const searchParams = useSearchParams()
@@ -21,12 +25,22 @@ function BioLink() {
 
 	return (
 		<Link href={bioPath} replace>
-			Bio
+			<LetterSwapForward
+				label='bio'
+				reverse={false}
+				className='text-foreground/50 hover:text-foreground transition-colors'
+			/>
 		</Link>
 	)
 }
 
-export function NavBar({ categories }: { categories: string[] }) {
+export function NavBar({
+	categories,
+	socialNetworkEntries,
+}: {
+	categories: string[]
+	socialNetworkEntries: [string, unknown][]
+}) {
 	return (
 		<nav className='flex items-center justify-between px-6 py-8 md:p-8'>
 			<Link href='/' replace>
@@ -48,16 +62,20 @@ export function NavBar({ categories }: { categories: string[] }) {
 					</div>
 				</div>
 			</Link>
-			<menu>
-				<ul className='hidden md:flex items-center gap-4 text-lg'>
+			<menu className='flex items-center'>
+				<ul className='hidden md:flex items-center gap-4 font-medium tracking-wide font-heading uppercase'>
 					<li>
 						<DropdownMenu>
 							<DropdownMenuTrigger className='focus:outline-none'>
-								Work
+								<LetterSwapForward
+									label='work'
+									reverse={false}
+									className='uppercase text-foreground/50 hover:text-foreground transition-colors'
+								/>
 							</DropdownMenuTrigger>
-							<DropdownMenuContent align='center' sideOffset={16}>
+							<DropdownMenuContent2 align='center' sideOffset={16}>
 								<Link href='/' replace>
-									<DropdownMenuItem>Todos</DropdownMenuItem>
+									<DropdownMenuItem2>Todos</DropdownMenuItem2>
 								</Link>
 								{categories.map((category) => (
 									<Link
@@ -67,26 +85,64 @@ export function NavBar({ categories }: { categories: string[] }) {
 											search: `?category=${category}`,
 										}}
 										replace>
-										<DropdownMenuItem>{unslugify(category)}</DropdownMenuItem>
+										<DropdownMenuItem2>{unslugify(category)}</DropdownMenuItem2>
 									</Link>
 								))}
-							</DropdownMenuContent>
+							</DropdownMenuContent2>
 						</DropdownMenu>
 					</li>
 					<li>
-						<Suspense fallback={<Link href='/#bio'>Bio</Link>}>
+						<Suspense
+							fallback={
+								<Link href='/#bio'>
+									<LetterSwapForward
+										label='Bio'
+										reverse={false}
+										className='text-foreground/50 hover:text-foreground transition-colors'
+									/>
+								</Link>
+							}>
 							<BioLink />
 						</Suspense>
 					</li>
 					<li>
 						<Link href='#contacto' replace>
-							Contacto
+							<LetterSwapForward
+								label='contacto'
+								reverse={false}
+								className='text-foreground/50 hover:text-foreground transition-colors'
+							/>
 						</Link>
 					</li>
 				</ul>
+				{socialNetworkEntries && socialNetworkEntries.length > 0 && (
+					<ul className='hidden lg:flex items-center gap-2 ml-8'>
+						{socialNetworkEntries.map(([key, value]) => (
+							<li
+								key={key}
+								className='opacity-70 hover:opacity-100 hover:scale-115 transition-all'>
+								<Link
+									href={String(value)}
+									target='_blank'
+									rel='noopener noreferrer'>
+									{key === "Vimeo" ? (
+										<VimeoIcon />
+									) : key === "Instagram" ? (
+										<InstagramIcon />
+									) : (
+										<LinkedinIcon />
+									)}
+								</Link>
+							</li>
+						))}
+					</ul>
+				)}
 				<div className='md:hidden'>
 					<Suspense fallback={<div>Loading...</div>}>
-						<AppSideBar categories={categories} />
+						<AppSideBar
+							categories={categories}
+							socialNetworkEntries={socialNetworkEntries}
+						/>
 					</Suspense>
 					<SidebarTrigger />
 				</div>

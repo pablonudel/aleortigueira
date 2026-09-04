@@ -13,12 +13,15 @@ import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
+import InstagramIcon from "./instagram-icon"
+import LinkedinIcon from "./linkedin-icon"
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
 } from "./ui/accordion"
+import VimeoIcon from "./vimeo-icon"
 
 function BioLink() {
 	const { setOpenMobile } = useSidebar()
@@ -33,7 +36,13 @@ function BioLink() {
 	)
 }
 
-export function AppSideBar({ categories }: { categories: string[] }) {
+export function AppSideBar({
+	categories,
+	socialNetworkEntries,
+}: {
+	categories: string[]
+	socialNetworkEntries: [string, unknown][]
+}) {
 	const { setOpenMobile } = useSidebar()
 
 	return (
@@ -48,18 +57,18 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 				/>
 			</SidebarHeader>
 			<SidebarContent className='justify-center'>
-				<SidebarGroup className='flex flex-col gap-4 text-4xl font-sans font-light text-center'>
+				<SidebarGroup className='flex flex-col gap-4 text-4xl font-heading font-light text-center uppercase'>
 					<Accordion type='single' collapsible>
 						<AccordionItem value='work'>
-							<AccordionTrigger className='justify-center text-4xl font-sans font-light'>
+							<AccordionTrigger className='justify-center text-4xl font-light font-heading uppercase'>
 								Work
 							</AccordionTrigger>
-							<AccordionContent className='flex flex-col gap-2 h-fit text-center pt-4'>
+							<AccordionContent className='flex flex-col gap-2 h-fit text-center font-normal pt-4'>
 								<Link
 									href='/'
 									onClick={() => setOpenMobile(false)}
 									style={{ textDecoration: "none" }}
-									className='text-2xl'
+									className='text-xl font-sans uppercase'
 									replace>
 									Todos
 								</Link>
@@ -72,7 +81,7 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 										}}
 										onClick={() => setOpenMobile(false)}
 										style={{ textDecoration: "none" }}
-										className='text-2xl'
+										className='text-xl uppercase font-sans'
 										replace>
 										{unslugify(category)}
 									</Link>
@@ -88,7 +97,28 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 					</Link>
 				</SidebarGroup>
 			</SidebarContent>
-			<SidebarFooter className='pb-8'>Hola</SidebarFooter>
+			<SidebarFooter className='pb-8 items-center'>
+				{socialNetworkEntries && socialNetworkEntries.length > 0 && (
+					<ul className='flex lg:hidden items-center gap-6'>
+						{socialNetworkEntries.map(([key, value]) => (
+							<li key={key}>
+								<Link
+									href={String(value)}
+									target='_blank'
+									rel='noopener noreferrer'>
+									{key === "Vimeo" ? (
+										<VimeoIcon size={30} />
+									) : key === "Instagram" ? (
+										<InstagramIcon size={30} />
+									) : (
+										<LinkedinIcon size={30} />
+									)}
+								</Link>
+							</li>
+						))}
+					</ul>
+				)}
+			</SidebarFooter>
 		</Sidebar>
 	)
 }
