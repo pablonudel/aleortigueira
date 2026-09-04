@@ -42,7 +42,7 @@ export function NavBar({
 	socialNetworkEntries: [string, unknown][]
 }) {
 	return (
-		<nav className='flex items-center justify-between px-6 py-8 md:p-8'>
+		<nav className='flex items-center justify-between px-4 md:px-8 py-8 md:p-8'>
 			<Link href='/' replace>
 				<div className='flex items-center gap-2 md:gap-4'>
 					<Image
@@ -53,7 +53,7 @@ export function NavBar({
 						className='object-cover h-8 md:h-10 w-auto'
 					/>
 					<div>
-						<h1 className='text-[1.1rem] md:text-2xl font-bold uppercase leading-5 md:leading-6'>
+						<h1 className='text-[1rem] md:text-2xl font-bold uppercase leading-5 md:leading-6'>
 							Alejandro Ortigueira (ADF)
 						</h1>
 						<h2 className='text-[1rem] md:text-xl uppercase tracking-wide text-muted-foreground leading-5 md:leading-6'>
@@ -144,6 +144,8 @@ export function NavBar({
 							socialNetworkEntries={socialNetworkEntries}
 						/>
 					</Suspense>
+				</div>
+				<div className='md:hidden'>
 					<SidebarTrigger />
 				</div>
 			</menu>

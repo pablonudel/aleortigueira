@@ -32,7 +32,7 @@ export default async function BioSection() {
 		<div
 			id='bio'
 			className='flex flex-col lg:flex-row lg:max-w-11/12 mx-auto mb-8'>
-			<div className='w-full px-6 lg:px-0 lg:py-8 bio-gradient'>
+			<div className='w-full px-4 md:px-8 lg:px-0 lg:py-8 bio-gradient'>
 				<Image
 					src={`${imageBaseURL}/${image}`}
 					alt='Profile Image'
@@ -41,7 +41,7 @@ export default async function BioSection() {
 					className='w-full md:aspect-auto md:h-90 lg:h-full object-cover'
 				/>
 			</div>
-			<div className='flex w-full px-6 pt-6 lg:pt-8 pb-8 bio-text-gradient'>
+			<div className='flex w-full px-4 md:px-8 pt-6 lg:pt-8 pb-8 bio-text-gradient'>
 				<div className='self-center'>
 					<h2 className='text-3xl mb-4 font-medium uppercase'>Bio</h2>
 					<p className='whitespace-pre-line'>{bio}</p>

@@ -40,7 +40,7 @@ export default async function ContactSection({
 			: []
 
 	return (
-		<div id='contacto' className='bg-foreground/3 p-8'>
+		<div id='contacto' className='bg-foreground/3 px-4 md:px-8 py-8'>
 			{email}
 			{phoneEntries.map(([key, value]) => (
 				<div key={key}>
