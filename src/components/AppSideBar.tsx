@@ -27,11 +27,7 @@ function BioLink() {
 	const bioPath = queryString ? `?${queryString}#bio` : "/#bio"
 
 	return (
-		<Link
-			className='font-bold'
-			href={bioPath}
-			onClick={() => setOpenMobile(false)}
-			replace>
+		<Link href={bioPath} onClick={() => setOpenMobile(false)} replace>
 			Bio
 		</Link>
 	)
@@ -52,10 +48,10 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 				/>
 			</SidebarHeader>
 			<SidebarContent className='justify-center'>
-				<SidebarGroup className='flex flex-col gap-2 text-center text-2xl'>
+				<SidebarGroup className='flex flex-col gap-4 text-4xl font-sans font-light text-center'>
 					<Accordion type='single' collapsible>
 						<AccordionItem value='work'>
-							<AccordionTrigger className='justify-center text-2xl font-bold'>
+							<AccordionTrigger className='justify-center text-4xl font-sans font-light'>
 								Work
 							</AccordionTrigger>
 							<AccordionContent className='flex flex-col gap-2 h-fit text-center pt-4'>
@@ -63,7 +59,7 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 									href='/'
 									onClick={() => setOpenMobile(false)}
 									style={{ textDecoration: "none" }}
-									className='text-xl'
+									className='text-2xl'
 									replace>
 									Todos
 								</Link>
@@ -76,7 +72,7 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 										}}
 										onClick={() => setOpenMobile(false)}
 										style={{ textDecoration: "none" }}
-										className='text-xl'
+										className='text-2xl'
 										replace>
 										{unslugify(category)}
 									</Link>
@@ -84,19 +80,10 @@ export function AppSideBar({ categories }: { categories: string[] }) {
 							</AccordionContent>
 						</AccordionItem>
 					</Accordion>
-					<Suspense
-						fallback={
-							<Link className='font-bold' href='/#bio'>
-								Bio
-							</Link>
-						}>
+					<Suspense fallback={<Link href='/#bio'>Bio</Link>}>
 						<BioLink />
 					</Suspense>
-					<Link
-						href='#contacto'
-						onClick={() => setOpenMobile(false)}
-						className='font-bold'
-						replace>
+					<Link href='#contacto' onClick={() => setOpenMobile(false)} replace>
 						Contacto
 					</Link>
 				</SidebarGroup>
