@@ -9,7 +9,7 @@ export default function Home({
 	searchParams: Promise<{ category?: string }>
 }) {
 	return (
-		<div className='space-y-8'>
+		<div className='space-y-16'>
 			<Suspense fallback={<ProjectListSkeleton />}>
 				<ProjectList searchParams={searchParams} />
 			</Suspense>

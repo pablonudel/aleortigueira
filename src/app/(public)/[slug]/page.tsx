@@ -30,7 +30,7 @@ async function Content({ slug }: { slug: string }) {
 	const slugifiedCategoryName = slugify(data!.category.name)
 
 	return (
-		<div className='flex-1 mb-8'>
+		<div className='flex-1 mb-16'>
 			<div className='flex flex-col xl:flex-row w-full'>
 				{data!.video && (
 					<iframe
@@ -44,7 +44,7 @@ async function Content({ slug }: { slug: string }) {
 						className='w-full xl:w-3/5 h-auto aspect-video'
 					/>
 				)}
-				<div className='p-6 md:p-8 w-full bg-muted-foreground/10 xl:my-8'>
+				<div className='p-4 md:p-8 w-full bg-muted-foreground/10 xl:my-8'>
 					<h1 className='text-3xl font-bold tracking-wide mb-8'>
 						{data!.name}
 					</h1>
@@ -58,7 +58,7 @@ async function Content({ slug }: { slug: string }) {
 				</div>
 			</div>
 			{data!.gallery.length > 0 && (
-				<div className='px-6 md:px-8 pt-8'>
+				<div className='px-4 md:px-8 pt-16'>
 					<ImageGallery gallery={data!.gallery} projectId={data!.id} />
 				</div>
 			)}

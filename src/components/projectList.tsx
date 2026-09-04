@@ -47,7 +47,7 @@ export default async function ProjectList({
 	const unSlugifiedCategory = category && unslugify(category)
 
 	return (
-		<>
+		<div className='space-y-8'>
 			{category && (
 				<h2 className='text-3xl font-medium uppercase px-4 md:px-8'>
 					{unSlugifiedCategory}
@@ -58,6 +58,6 @@ export default async function ProjectList({
 					<ProjectItem key={index} project={project} />
 				))}
 			</div>
-		</>
+		</div>
 	)
 }
