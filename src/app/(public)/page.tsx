@@ -5,14 +5,12 @@ import { Suspense } from "react"
 export default function Home({
 	searchParams,
 }: {
-	searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+	searchParams: Promise<{ category?: string }>
 }) {
 	return (
 		<div className='space-y-8'>
 			<Suspense fallback={<div>Cargando proyectos...</div>}>
-				{searchParams.then(({ category }) => (
-					<ProjectList category={category as string | undefined} />
-				))}
+				<ProjectList searchParams={searchParams} />
 			</Suspense>
 			<BioSection />
 		</div>

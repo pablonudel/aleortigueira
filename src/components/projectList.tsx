@@ -4,9 +4,14 @@ import { DatabaseX, MessageSquareWarning, Tag } from "lucide-react"
 import ProjectItem from "./projectItem"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty"
 
-export default async function ProjectList({ category }: { category?: string }) {
+export default async function ProjectList({
+	searchParams,
+}: {
+	searchParams: Promise<{ category?: string }>
+}) {
 	"use cache"
-	const { success, data } = await getProjects(category as never)
+	const { category } = await searchParams
+	const { success, data } = await getProjects(category)
 
 	if (!success) {
 		return (

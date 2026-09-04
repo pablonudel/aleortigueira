@@ -179,7 +179,7 @@ export async function getAllProjects(
 }
 
 export async function getProjects(
-	categoryName = undefined,
+	categoryName?: string | undefined,
 ): Promise<getAllProjectsType> {
 	try {
 		const projects = await prisma.project.findMany({
