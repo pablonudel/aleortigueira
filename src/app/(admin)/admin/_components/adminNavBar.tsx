@@ -3,6 +3,7 @@
 import { profileType } from "@/actions/profile.actions"
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
+import { LogOut } from "lucide-react"
 import { redirect } from "next/navigation"
 import ProfileForm from "./profileForm"
 
@@ -17,7 +18,7 @@ export default function AdminNavBar({ profile }: { profile: profileType }) {
 		})
 	}
 	return (
-		<nav className='flex items-center justify-between p-8 border-b border-muted-foreground/10'>
+		<nav className='flex items-center text-white justify-between p-8 bg-foreground'>
 			<div>
 				<h1 className='text-2xl font-bold uppercase leading-6'>
 					Alejandro Ortigueira
@@ -26,9 +27,11 @@ export default function AdminNavBar({ profile }: { profile: profileType }) {
 					Panel de administración
 				</h2>
 			</div>
-			<div className='space-x-4'>
+			<div className='flex gap-4 items-center'>
 				<ProfileForm profile={profile} />
-				<Button onClick={handleLogout}>Cerrar sesión</Button>
+				<Button onClick={handleLogout} size='icon' variant='outline'>
+					<LogOut />
+				</Button>
 			</div>
 		</nav>
 	)

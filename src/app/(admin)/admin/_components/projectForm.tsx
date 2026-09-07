@@ -95,7 +95,7 @@ export default function ProjectForm({
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button
-					variant={`${mode === "edit" ? "ghost" : "outline"}`}
+					variant={`${mode === "edit" ? "ghost" : "default"}`}
 					size='sm'
 					className={`${mode === "edit" && "w-full"}`}>
 					{mode === "create" ? "Nuevo Proyecto" : "Editar"}

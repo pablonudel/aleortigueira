@@ -14,7 +14,7 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -28,7 +28,7 @@ import {
 	EmptyTitle,
 } from "@/components/ui/empty"
 import { Project } from "@/generated/prisma/client"
-import { EllipsisVertical } from "lucide-react"
+import { EllipsisVertical, Move, Tag } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import ProjectForm from "./projectForm"
@@ -63,10 +63,25 @@ export default function ProjectsList({
 	}
 
 	return (
-		<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4'>
+		<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2'>
 			{data.map((project, index) => (
 				<div key={index} className='relative'>
-					<ProjectMenu project={project} categories={categories} />
+					<Button
+						className='absolute top-2 left-2 z-10'
+						variant='default'
+						size='icon'>
+						<Move />
+					</Button>
+					<ProjectMenu
+						project={{
+							...project,
+							category: {
+								...project.category,
+								name: project.category.name ?? "",
+							},
+						}}
+						categories={categories}
+					/>
 					<Card className={`${project.isPublic ? "" : "bg-muted/50"}`}>
 						<Image
 							src={`${posterURLBase}/${project.id}/${project.poster}`}
@@ -76,12 +91,12 @@ export default function ProjectsList({
 							className={`${project.isPublic ? "" : "opacity-60"} w-full h-auto object-cover`}
 							loading='eager'
 						/>
-						<CardHeader>
-							<CardTitle className='truncate'>{project.name}</CardTitle>
-						</CardHeader>
 						<CardContent>
-							<p>{project.category.name}</p>
-							<p>{project.isPublic ? "Público" : "Privado"}</p>
+							<h2 className='truncate capitalize mb-2'>{project.name}</h2>
+							<p className='flex items-center gap-2'>
+								<Tag size={14} />
+								{project.category.name}
+							</p>
 						</CardContent>
 					</Card>
 				</div>
