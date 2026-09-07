@@ -1,6 +1,12 @@
 import { getProfile } from "@/actions/profile.actions"
-import { DatabaseX } from "lucide-react"
+import { DatabaseX, Mail } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import CenterUnderline from "./fancy/text/underline-center"
+import InstagramIcon from "./instagram-icon"
+import LinkedinIcon from "./linkedin-icon"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty"
+import VimeoIcon from "./vimeo-icon"
 
 export default async function ContactSection({
 	profile,
@@ -40,18 +46,62 @@ export default async function ContactSection({
 			: []
 
 	return (
-		<div id='contacto' className='bg-foreground/3 px-4 md:px-8 py-8'>
-			{email}
-			{phoneEntries.map(([key, value]) => (
-				<div key={key}>
-					{key}: {String(value)}
+		<div
+			id='contacto'
+			className='flex flex-col lg:flex-row items-start gap-8 bg-foreground/3 px-4 md:px-8 py-10'>
+			<div className='lg:w-1/3 flex items-center gap-2 lg:x-1/3'>
+				<Image
+					src='/ao.svg'
+					alt='Logo'
+					width={662}
+					height={417}
+					className='object-cover h-7 w-auto'
+				/>
+				<div>
+					<h1 className='text-[1rem] font-bold uppercase leading-4.5'>
+						Alejandro Ortigueira (ADF)
+					</h1>
+					<h2 className='text-[0.9rem] uppercase tracking-wide text-muted-foreground leading-4.5'>
+						Director de Fotografía
+					</h2>
 				</div>
-			))}
-			{socialNetworkEntries.map(([key, value]) => (
-				<div key={key}>
-					{key}: {String(value)}
+			</div>
+
+			<div className='lg:w-1/3 lg:flex lg:justify-center'>
+				<div className='flex flex-col gap-4'>
+					<div className='lg:text-center'>
+						{phoneEntries.map(([key, value]) => (
+							<p key={key} className='font-medium'>
+								<span className='font-normal'>{key} | </span> {String(value)}
+							</p>
+						))}
+					</div>
+					<Link
+						href={`mailto:${email}`}
+						className='flex items-center gap-2 font-medium'>
+						<Mail size={20} color='#999999' strokeWidth='2' />
+						<CenterUnderline>{email}</CenterUnderline>
+					</Link>
 				</div>
-			))}
+			</div>
+			<div className='lg:w-1/3 flex lg:justify-end lg:items-center-safe gap-4'>
+				{socialNetworkEntries.map(([key, value]) => (
+					<Link
+						key={key}
+						href={String(value)}
+						target='_blank'
+						rel='noopener noreferrer'
+						className='scale-100 hover:scale-110 transition-scale'>
+						{key === "Vimeo" ? (
+							<VimeoIcon size={30} />
+						) : key === "Instagram" ? (
+							<InstagramIcon size={30} />
+						) : (
+							<LinkedinIcon size={30} />
+						)}
+					</Link>
+				))}
+			</div>
 		</div>
 	)
 }
