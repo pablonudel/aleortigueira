@@ -184,7 +184,6 @@ function AddProjectForm({
 		() => initialGalleryPreviews,
 	)
 	const [activeId, setActiveId] = useState<string | null>(null)
-	const [overId, setOverId] = useState<string | null>(null)
 	const [removePoster, setRemovePoster] = useState(false)
 	const posterPreviewRef = useRef<PreviewFile | null>(null)
 	const galleryPreviewsRef = useRef<PreviewFile[]>([])
@@ -639,21 +638,17 @@ function AddProjectForm({
 					</span>
 				</div>
 				<DndContext
+					id='gallery-reorder'
 					sensors={sensors}
 					collisionDetection={pointerWithin}
 					onDragStart={({ active }) => {
 						setActiveId(String(active.id))
 					}}
-					onDragOver={({ over }) => {
-						setOverId(over ? String(over.id) : null)
-					}}
 					onDragCancel={() => {
 						setActiveId(null)
-						setOverId(null)
 					}}
 					onDragEnd={({ active, over }) => {
 						setActiveId(null)
-						setOverId(null)
 						if (!over || active.id === over.id) return
 						setGalleryPreviews((items) => {
 							const oldIndex = items.findIndex((item) => item.id === active.id)
@@ -670,11 +665,7 @@ function AddProjectForm({
 								<SortableGalleryItem
 									key={preview.id}
 									item={preview}
-									isDragging={Boolean(activeId)}
 									isActive={activeId === preview.id}
-									isOverTarget={
-										overId === preview.id && activeId !== preview.id
-									}
 									onRemove={() => handleDeleteGalleryItem(preview.id)}
 								/>
 							))}
@@ -701,25 +692,19 @@ function AddProjectForm({
 
 function SortableGalleryItem({
 	item,
-	isDragging,
 	isActive,
-	isOverTarget,
 	onRemove,
 }: {
 	item: PreviewFile
-	isDragging: boolean
 	isActive: boolean
-	isOverTarget: boolean
 	onRemove: () => void
 }) {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({ id: item.id })
-	const opacity = isActive || isOverTarget ? 0.6 : 1
-	const freezePosition = isDragging
 	const style = {
-		transform: freezePosition ? undefined : CSS.Transform.toString(transform),
-		transition: freezePosition ? undefined : transition,
-		opacity,
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isActive ? 0 : 1,
 	}
 
 	return (

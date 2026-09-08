@@ -30,6 +30,11 @@ type EditProjectResult = {
 	}
 }
 
+type ReorderProjectsResult = {
+	success: boolean
+	message: string
+}
+
 async function getUniqueSlug(baseSlug: string) {
 	const existing = await prisma.project.findUnique({
 		where: { slug: baseSlug },
@@ -175,6 +180,46 @@ export async function getAllProjects(
 			message: "Error al obtener los proyectos.",
 			data: [],
 		}
+	}
+}
+
+export async function reorderProjects(
+	projectIds: string[],
+): Promise<ReorderProjectsResult> {
+	try {
+		if (
+			projectIds.length === 0 ||
+			new Set(projectIds).size !== projectIds.length
+		) {
+			return { success: false, message: "El orden de proyectos no es válido." }
+		}
+
+		const projects = await prisma.project.findMany({
+			where: { id: { in: projectIds } },
+			select: { id: true },
+		})
+		if (projects.length !== projectIds.length) {
+			return {
+				success: false,
+				message: "No se encontraron todos los proyectos.",
+			}
+		}
+
+		await prisma.$transaction(
+			projectIds.map((id, index) =>
+				prisma.project.update({
+					where: { id },
+					data: { order: projectIds.length - index },
+				}),
+			),
+		)
+
+		revalidatePath("/admin")
+		revalidatePath("/")
+		return { success: true, message: "Orden actualizado." }
+	} catch (error) {
+		console.error("Error reordering projects:", error)
+		return { success: false, message: "Error al actualizar el orden." }
 	}
 }
 
