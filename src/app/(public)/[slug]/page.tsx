@@ -5,42 +5,41 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@/components/ui/empty"
-import { Spinner } from "@/components/ui/spinner"
 import { slugify } from "@/lib/utils"
 import { MessageCircleWarning, Tag } from "lucide-react"
-import { cacheTag } from "next/cache"
 import Link from "next/link"
-import { Suspense } from "react"
+import { Suspense, type ComponentProps } from "react"
 import ImageGallery from "./_components/imageGallery"
 
-export default async function Page({
+type ContentData = {
+	id: string
+	slug: string
+	name: string
+	description: string | null
+	video?: string | null
+	category: {
+		name: string
+	}
+	gallery: ComponentProps<typeof ImageGallery>["gallery"]
+}
+
+export default function Page({
 	params,
 }: {
 	params: Promise<{ slug: string }>
 }) {
 	return (
-		<Suspense
-			fallback={
-				<div className='flex items-center justify-center h-full'>
-					<Spinner className='size-8' />
-				</div>
-			}>
-			<RouteContent params={params} />
+		<Suspense fallback={<div>Cargando...</div>}>
+			<ProjectPage params={params} />
 		</Suspense>
 	)
 }
 
-async function RouteContent({ params }: { params: Promise<{ slug: string }> }) {
+async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params
-	return <Content slug={slug} />
-}
-
-async function Content({ slug }: { slug: string }) {
-	"use cache"
-	cacheTag(`project:${slug}`)
 	const { success, data } = await getProjectBySlug(slug)
 
-	if (!success) {
+	if (!success || !data) {
 		return (
 			<Empty>
 				<EmptyHeader>
@@ -55,6 +54,13 @@ async function Content({ slug }: { slug: string }) {
 			</Empty>
 		)
 	}
+
+	return <Content data={data} />
+}
+
+async function Content({ data }: { data: ContentData }) {
+	// "use cache"
+	// cacheTag(`project:${data.slug}`)
 
 	const slugifiedCategoryName = slugify(data!.category.name)
 
