@@ -2,7 +2,7 @@ import { getProjectBySlug } from "@/actions/project.actions"
 import { Spinner } from "@/components/ui/spinner"
 import { slugify } from "@/lib/utils"
 import { Tag } from "lucide-react"
-import { cacheTag } from "next/dist/server/use-cache/cache-tag"
+import { cacheTag } from "next/cache"
 import Link from "next/link"
 import { Suspense } from "react"
 import ImageGallery from "./_components/imageGallery"
@@ -12,8 +12,6 @@ export default async function Page({
 }: {
 	params: Promise<{ slug: string }>
 }) {
-	const { slug } = await params
-
 	return (
 		<Suspense
 			fallback={
@@ -21,9 +19,14 @@ export default async function Page({
 					<Spinner className='size-8' />
 				</div>
 			}>
-			<Content slug={slug} />
+			<RouteContent params={params} />
 		</Suspense>
 	)
+}
+
+async function RouteContent({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params
+	return <Content slug={slug} />
 }
 
 async function Content({ slug }: { slug: string }) {
