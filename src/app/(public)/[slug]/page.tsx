@@ -1,7 +1,13 @@
 import { getProjectBySlug } from "@/actions/project.actions"
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyTitle,
+} from "@/components/ui/empty"
 import { Spinner } from "@/components/ui/spinner"
 import { slugify } from "@/lib/utils"
-import { Tag } from "lucide-react"
+import { MessageCircleWarning, Tag } from "lucide-react"
 import { cacheTag } from "next/cache"
 import Link from "next/link"
 import { Suspense } from "react"
@@ -32,10 +38,22 @@ async function RouteContent({ params }: { params: Promise<{ slug: string }> }) {
 async function Content({ slug }: { slug: string }) {
 	"use cache"
 	cacheTag(`project:${slug}`)
-	const { success, message, data } = await getProjectBySlug(slug)
+	const { success, data } = await getProjectBySlug(slug)
 
 	if (!success) {
-		return <div>{message}</div>
+		return (
+			<Empty>
+				<EmptyHeader>
+					<EmptyTitle>
+						<MessageCircleWarning />
+					</EmptyTitle>
+					<EmptyDescription>
+						Proyecto no encontrado. Puede que haya sido eliminado o que la URL
+						sea incorrecta.
+					</EmptyDescription>
+				</EmptyHeader>
+			</Empty>
+		)
 	}
 
 	const slugifiedCategoryName = slugify(data!.category.name)
