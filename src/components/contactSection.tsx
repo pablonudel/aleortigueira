@@ -51,7 +51,7 @@ export default async function ContactSection({
 			className='flex flex-col lg:flex-row items-start gap-8 bg-foreground/3 px-4 md:px-8 py-10'>
 			<div className='lg:w-1/3 flex items-center gap-2 lg:x-1/3'>
 				<Image
-					src='/ao.svg'
+					src='/logo.svg'
 					alt='Logo'
 					width={662}
 					height={417}

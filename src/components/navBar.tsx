@@ -46,7 +46,7 @@ export function NavBar({
 			<Link href='/'>
 				<div className='flex items-center gap-2 md:gap-4'>
 					<Image
-						src='/ao.svg'
+						src='/logo.svg'
 						alt='Logo'
 						width={662}
 						height={417}

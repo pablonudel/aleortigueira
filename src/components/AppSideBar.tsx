@@ -49,7 +49,7 @@ export function AppSideBar({
 		<Sidebar variant='sidebar'>
 			<SidebarHeader className='pt-8'>
 				<Image
-					src='/ao.svg'
+					src='/logo.svg'
 					alt='Logo'
 					width={662}
 					height={417}
