@@ -103,7 +103,7 @@ export async function editCategory(name: string, newName: string) {
 		if (name === newCategoryName) {
 			return { success: false, message: "El nuevo nombre es igual al actual" }
 		}
-		const category = await getCategoryByName(name)
+		const category = await getCategoryByName(slugify(name))
 		if (!category) {
 			return { success: false, message: "Categoría no encontrada" }
 		}
@@ -112,7 +112,7 @@ export async function editCategory(name: string, newName: string) {
 			return { success: false, message: "El nombre de la categoría ya existe" }
 		}
 		await prisma.category.update({
-			where: { name },
+			where: { name: slugify(name) },
 			data: { name: newCategoryName },
 		})
 		revalidatePath("/")
