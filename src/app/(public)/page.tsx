@@ -20,7 +20,7 @@ export default function Home({
 
 function ProjectListSkeleton() {
 	return (
-		<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+		<div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-1'>
 			<Skeleton className='aspect-video w-full' />
 			<Skeleton className='aspect-video w-full hidden md:block' />
 			<Skeleton className='aspect-video w-full hidden xl:block' />

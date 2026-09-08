@@ -588,7 +588,6 @@ export async function editProjectById(
 
 		revalidatePath("/admin")
 		revalidatePath("/")
-		// updateTag(`project:${slug}`)
 		revalidatePath(`/(public)/${slug}`, "page")
 
 		return {

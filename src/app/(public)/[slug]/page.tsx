@@ -5,6 +5,7 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@/components/ui/empty"
+import { Spinner } from "@/components/ui/spinner"
 import { slugify } from "@/lib/utils"
 import { MessageCircleWarning, Tag } from "lucide-react"
 import Link from "next/link"
@@ -29,7 +30,12 @@ export default function Page({
 	params: Promise<{ slug: string }>
 }) {
 	return (
-		<Suspense fallback={<div>Cargando...</div>}>
+		<Suspense
+			fallback={
+				<div className='flex justify-center items-center h-full'>
+					<Spinner className='size-8' />
+				</div>
+			}>
 			<ProjectPage params={params} />
 		</Suspense>
 	)
@@ -59,9 +65,6 @@ async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
 }
 
 async function Content({ data }: { data: ContentData }) {
-	// "use cache"
-	// cacheTag(`project:${data.slug}`)
-
 	const slugifiedCategoryName = slugify(data!.category.name)
 
 	return (
