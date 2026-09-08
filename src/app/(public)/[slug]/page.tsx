@@ -12,6 +12,8 @@ export default async function Page({
 }: {
 	params: Promise<{ slug: string }>
 }) {
+	const { slug } = await params
+
 	return (
 		<Suspense
 			fallback={
@@ -19,9 +21,7 @@ export default async function Page({
 					<Spinner className='size-8' />
 				</div>
 			}>
-			{params.then(({ slug }) => (
-				<Content slug={slug} />
-			))}
+			<Content slug={slug} />
 		</Suspense>
 	)
 }
