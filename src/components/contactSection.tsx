@@ -91,7 +91,7 @@ export default async function ContactSection({
 						href={String(value)}
 						target='_blank'
 						rel='noopener noreferrer'
-						className='scale-100 hover:scale-110 transition-scale'>
+						className='scale-100 hover:scale-110 transition-all duration-300 ease-in-out'>
 						{key === "Vimeo" ? (
 							<VimeoIcon size={30} />
 						) : key === "Instagram" ? (

@@ -21,10 +21,10 @@ import VimeoIcon from "./vimeo-icon"
 function BioLink() {
 	const searchParams = useSearchParams()
 	const queryString = searchParams.toString()
-	const bioPath = queryString ? `?${queryString}#bio` : "/#bio"
+	const bioPath = queryString ? `?${queryString}#bio` : "#bio"
 
 	return (
-		<Link href={bioPath} replace>
+		<Link href={bioPath}>
 			<LetterSwapForward
 				label='bio'
 				reverse={false}
@@ -43,7 +43,7 @@ export function NavBar({
 }) {
 	return (
 		<nav className='flex items-center justify-between px-4 md:px-8 py-8 md:py-12'>
-			<Link href='/' replace>
+			<Link href='/'>
 				<div className='flex items-center gap-2 md:gap-4'>
 					<Image
 						src='/ao.svg'
@@ -94,7 +94,7 @@ export function NavBar({
 					<li>
 						<Suspense
 							fallback={
-								<Link href='/#bio'>
+								<Link href='#bio'>
 									<LetterSwapForward
 										label='Bio'
 										reverse={false}
@@ -106,7 +106,7 @@ export function NavBar({
 						</Suspense>
 					</li>
 					<li>
-						<Link href='#contacto' replace>
+						<Link href='#contacto'>
 							<LetterSwapForward
 								label='contacto'
 								reverse={false}
@@ -120,7 +120,7 @@ export function NavBar({
 						{socialNetworkEntries.map(([key, value]) => (
 							<li
 								key={key}
-								className='opacity-70 hover:opacity-100 hover:scale-115 transition-all'>
+								className='opacity-70 hover:opacity-100 hover:scale-115 transition-all duration-300 ease-in-out'>
 								<Link
 									href={String(value)}
 									target='_blank'
