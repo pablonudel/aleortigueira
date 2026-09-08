@@ -58,10 +58,10 @@ export default async function ContactSection({
 					className='object-cover h-7 w-auto'
 				/>
 				<div>
-					<h1 className='text-[1rem] font-bold uppercase leading-4.5'>
+					<h1 className='text-[1rem] font-medium uppercase leading-4.5 tracking-wide'>
 						Alejandro Ortigueira (ADF)
 					</h1>
-					<h2 className='text-[0.9rem] uppercase tracking-wide text-muted-foreground leading-4.5'>
+					<h2 className='text-[0.9rem] uppercase tracking-wider text-muted-foreground leading-4.5'>
 						Director de Fotografía
 					</h2>
 				</div>

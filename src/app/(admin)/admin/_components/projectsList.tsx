@@ -197,7 +197,11 @@ function SortableProjectCard({
 			/>
 			<Card className={`${project.isPublic ? "" : "bg-muted/50"}`}>
 				<Image
-					src={`${posterURLBase}/${project.id}/${project.poster}`}
+					src={
+						project.poster
+							? `${posterURLBase}/${project.id}/${project.poster}`
+							: "/placeholder.jpg"
+					}
 					alt={project.name}
 					width={400}
 					height={300}

@@ -50,13 +50,13 @@ export function NavBar({
 						alt='Logo'
 						width={662}
 						height={417}
-						className='object-cover h-8 md:h-10 w-auto'
+						className='object-cover h-7 md:h-10 w-auto'
 					/>
 					<div>
-						<h1 className='text-[1rem] md:text-2xl font-medium uppercase leading-5 md:leading-6 tracking-wide'>
+						<h1 className='text-[1rem] md:text-2xl font-medium uppercase leading-4.5 md:leading-6 tracking-wide'>
 							Alejandro Ortigueira (ADF)
 						</h1>
-						<h2 className='text-[1rem] md:text-xl uppercase tracking-wider text-muted-foreground/70 leading-5 md:leading-6'>
+						<h2 className='text-[0.9rem] md:text-xl uppercase tracking-wider text-muted-foreground/70 leading-4.5 md:leading-6'>
 							Director de Fotografía
 						</h2>
 					</div>
