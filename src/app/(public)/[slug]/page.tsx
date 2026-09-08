@@ -1,4 +1,5 @@
 import { getProjectBySlug } from "@/actions/project.actions"
+import { Spinner } from "@/components/ui/spinner"
 import { slugify } from "@/lib/utils"
 import { Tag } from "lucide-react"
 import { cacheTag } from "next/dist/server/use-cache/cache-tag"
@@ -12,7 +13,12 @@ export default async function Page({
 	params: Promise<{ slug: string }>
 }) {
 	return (
-		<Suspense fallback={<div>Cargando proyecto...</div>}>
+		<Suspense
+			fallback={
+				<div className='flex items-center justify-center h-full'>
+					<Spinner className='size-8' />
+				</div>
+			}>
 			{params.then(({ slug }) => (
 				<Content slug={slug} />
 			))}

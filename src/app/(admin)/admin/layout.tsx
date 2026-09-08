@@ -1,4 +1,5 @@
 import { getProfile, profileType } from "@/actions/profile.actions"
+import { Spinner } from "@/components/ui/spinner"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
@@ -11,7 +12,12 @@ export default function Layout({
 	children: React.ReactNode
 }>) {
 	return (
-		<Suspense fallback={<div>Cargando...</div>}>
+		<Suspense
+			fallback={
+				<div className='flex items-center justify-center h-full'>
+					<Spinner className='size-8' />
+				</div>
+			}>
 			<LayoutPage>{children}</LayoutPage>
 		</Suspense>
 	)
