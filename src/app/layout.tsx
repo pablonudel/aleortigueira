@@ -1,24 +1,12 @@
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
-import {
-	Geist,
-	Geist_Mono,
-	Noto_Sans,
-	Outfit,
-	Playfair_Display,
-} from "next/font/google"
+import { Geist, Geist_Mono, Noto_Sans, Outfit } from "next/font/google"
 import "./globals.css"
 
 const outfitHeading = Outfit({ subsets: ["latin"], variable: "--font-heading" })
 
 const notoSans = Noto_Sans({ subsets: ["latin"], variable: "--font-sans" })
-
-const playfairDisplay = Playfair_Display({
-	subsets: ["latin"],
-	variable: "--font-playfair-display",
-	// style: ["italic"],
-})
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -51,7 +39,6 @@ export default function RootLayout({
 				"font-sans",
 				notoSans.variable,
 				outfitHeading.variable,
-				playfairDisplay.variable,
 			)}
 			data-scroll-behavior='smooth'>
 			<body className='min-h-full flex flex-col'>

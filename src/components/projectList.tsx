@@ -9,7 +9,6 @@ export default async function ProjectList({
 }: {
 	searchParams: Promise<{ category?: string }>
 }) {
-	"use cache"
 	const { category } = await searchParams
 	const { success, data } = await getProjects(category)
 
