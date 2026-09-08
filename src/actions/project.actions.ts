@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma"
 import { slugify, unslugify } from "@/lib/utils"
 import { remove } from "@tigrisdata/storage"
 import { nanoid } from "nanoid"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { getCategoryById } from "./category.actions"
 import { uploadImage, validateImage } from "./common.actions"
 
@@ -588,7 +588,8 @@ export async function editProjectById(
 
 		revalidatePath("/admin")
 		revalidatePath("/")
-		revalidatePath(`/(public)/${slug}`, "page")
+		updateTag(`project:${slug}`)
+		revalidatePath(`/${slug}`)
 		// revalidatePath("/(public)/tag/[categoryName]", "page")
 
 		return {

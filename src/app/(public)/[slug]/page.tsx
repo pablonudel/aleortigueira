@@ -1,6 +1,7 @@
 import { getProjectBySlug } from "@/actions/project.actions"
 import { slugify } from "@/lib/utils"
 import { Tag } from "lucide-react"
+import { cacheTag } from "next/dist/server/use-cache/cache-tag"
 import Link from "next/link"
 import { Suspense } from "react"
 import ImageGallery from "./_components/imageGallery"
@@ -21,6 +22,7 @@ export default async function Page({
 
 async function Content({ slug }: { slug: string }) {
 	"use cache"
+	cacheTag(`project:${slug}`)
 	const { success, message, data } = await getProjectBySlug(slug)
 
 	if (!success) {
