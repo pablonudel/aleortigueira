@@ -11,6 +11,7 @@ import { MessageCircleWarning, Tag } from "lucide-react"
 import Link from "next/link"
 import { Suspense, type ComponentProps } from "react"
 import ImageGallery from "./_components/imageGallery"
+import VideoPlayer from "./_components/videoPlayer"
 
 type ContentData = {
 	id: string
@@ -71,18 +72,11 @@ async function Content({ data }: { data: ContentData }) {
 		<div className='flex-1 mb-16'>
 			<div className='flex flex-col xl:flex-row w-full'>
 				{data!.video && (
-					<iframe
-						title='vimeo-player'
-						src={`${data!.video}`}
-						width='100%'
-						height='auto'
-						referrerPolicy='strict-origin-when-cross-origin'
-						allow='autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share'
-						allowFullScreen
-						className='w-full xl:w-3/5 h-auto aspect-video'
-					/>
+					<div className='w-full xl:w-3/5 h-auto aspect-video'>
+						<VideoPlayer videoUrl={data!.video} />
+					</div>
 				)}
-				<div className='p-4 md:p-8 w-full bg-muted-foreground/10 xl:my-8'>
+				<div className='p-4 md:p-8 w-full xl:w-2/5 bg-muted-foreground/10 xl:my-8'>
 					<h1 className='text-3xl font-bold tracking-wide mb-8'>
 						{data!.name}
 					</h1>
