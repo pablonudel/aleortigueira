@@ -15,7 +15,11 @@ export default function ProjectItem({ project }: { project: projectType }) {
 					</h3>
 				</div>
 				<Image
-					src={`${posterURLBase}/${project.id}/${project.poster}`}
+					src={
+						project.poster
+							? `${posterURLBase}/${project.id}/${project.poster}`
+							: "/placeholder.jpg"
+					}
 					alt={project.name}
 					width={400}
 					height={300}
