@@ -8,7 +8,7 @@ const posterURLBase = `${process.env.NEXT_PUBLIC_TIGRIS_PUBLIC_ACCESS_URL}/proje
 export default function ProjectItem({ project }: { project: projectType }) {
 	return (
 		<Link href={`/${project.slug}`}>
-			<div className='relative hover:scale-95 transition-transform duration-300'>
+			<div className='relative hover:scale-x-97 hover:scale-y-95 transition-transform duration-300'>
 				<div className='absolute top-0 left-0 w-full h-full bg-black/40 bg-opacity-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300'>
 					<h3 className='text-white text-2xl font-bold tracking-wider'>
 						{project.name}
