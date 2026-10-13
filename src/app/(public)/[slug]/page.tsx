@@ -20,7 +20,7 @@ type ContentData = {
 	name: string
 	description: string | null
 	video?: string | null
-	poster: string
+	poster: string | null
 	category: {
 		name: string
 	}
