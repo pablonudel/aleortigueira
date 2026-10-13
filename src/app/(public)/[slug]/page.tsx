@@ -8,6 +8,7 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { slugify } from "@/lib/utils"
 import { MessageCircleWarning, Tag } from "lucide-react"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Suspense, type ComponentProps } from "react"
 import ImageGallery from "./_components/imageGallery"
@@ -19,10 +20,41 @@ type ContentData = {
 	name: string
 	description: string | null
 	video?: string | null
+	poster: string
 	category: {
 		name: string
 	}
 	gallery: ComponentProps<typeof ImageGallery>["gallery"]
+}
+
+type Props = {
+	params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { slug } = await params
+	const { success, data } = await getProjectBySlug(slug)
+
+	if (!success || !data) {
+		return {
+			title: "Proyecto no encontrado",
+			description: "El proyecto que buscas no existe o ha sido eliminado.",
+		}
+	}
+
+	return {
+		title: `${data.name} | Mi Portafolio`,
+		description: data.description
+			? data.description.slice(0, 150) + "..."
+			: "Detalles del proyecto",
+		openGraph: {
+			title: data.name,
+			description: data.description || undefined,
+			images: data.poster
+				? [data.poster]
+				: ["https://www.aleortigueira.com/aoweb.jpg"],
+		},
+	}
 }
 
 export default function Page({

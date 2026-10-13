@@ -1,7 +1,46 @@
 import BioSection from "@/components/bioSection"
 import ProjectList from "@/components/projectList"
 import { Skeleton } from "@/components/ui/skeleton"
+import type { Metadata } from "next"
 import { Suspense } from "react"
+
+export const metadata: Metadata = {
+	title: "Alejandro Ortigueira - Director de Fotografia",
+	description:
+		"Alejandro Ortigueira - Director de Fotografía | México | Argentina",
+	keywords: [
+		"ADF",
+		"dirección de fotografia",
+		"méxico",
+		"argentina",
+		"series",
+		"films",
+		"cine",
+		"publicidades",
+		"clips",
+	],
+	openGraph: {
+		title: "Alejandro Ortigueira - Director de Fotografia",
+		description:
+			"Alejandro Ortigueira - Director de Fotografía | México | Argentina",
+		siteName: "aleortigueira.com",
+		locale: "es_ES",
+		type: "website",
+		images: "https://www.aleortigueira.com/aoweb.jpg",
+	},
+	robots: {
+		index: true,
+		follow: true,
+		nocache: false,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-snippet": -1,
+			"max-image-preview": "large",
+			"max-video-preview": -1,
+		},
+	},
+}
 
 export default function Home({
 	searchParams,

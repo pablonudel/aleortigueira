@@ -1,6 +1,5 @@
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
-import type { Metadata } from "next"
 import { Geist, Geist_Mono, Noto_Sans, Outfit } from "next/font/google"
 import "./globals.css"
 
@@ -17,11 +16,6 @@ const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
 })
-
-export const metadata: Metadata = {
-	title: "Alejandro Ortigueira",
-	description: "Portfolio de Alejandro Ortigueira - Director de Fotografía",
-}
 
 export default function RootLayout({
 	children,
