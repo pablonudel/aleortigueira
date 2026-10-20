@@ -31,6 +31,8 @@ type Props = {
 	params: Promise<{ slug: string }>
 }
 
+const posterURLBase = `${process.env.NEXT_PUBLIC_TIGRIS_PUBLIC_ACCESS_URL}/projects`
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await params
 	const { success, data } = await getProjectBySlug(slug)
@@ -42,17 +44,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		}
 	}
 
+	const image = data.poster
+		? `${posterURLBase}/${data.id}/${data.poster}`
+		: "https://www.aleortigueira.com/aoweb.jpg"
+
 	return {
-		title: `${data.name} | Mi Portafolio`,
+		title: `Alejandro Ortigueira - ${data.name}`,
 		description: data.description
 			? data.description.slice(0, 150) + "..."
 			: "Detalles del proyecto",
 		openGraph: {
 			title: data.name,
 			description: data.description || undefined,
-			images: data.poster
-				? [data.poster]
-				: ["https://www.aleortigueira.com/aoweb.jpg"],
+			images: image,
 		},
 	}
 }
